@@ -34,43 +34,33 @@ const handler = createMcpHandler(
   async (server) => {
     server.tool("key_info", "Get information about your NetworksDB API key and usage statistics.", {},
       async () => toolResult(await makeRequest("/api/key")));
-
     server.tool("ip_info", "Get information about an IP address.",
       { ip: z.string().optional().describe("IP address; omit to use the requester's IP when supported") },
       async ({ ip }) => toolResult(await makeRequest("/api/ip-info", ip ? { ip } : {})));
-
     server.tool("ip_geo", "Get geolocation information for an IP address.",
       { ip: z.string().optional().describe("IP address; omit to use the requester's IP when supported") },
       async ({ ip }) => toolResult(await makeRequest("/api/ip-geo", ip ? { ip } : {})));
-
     server.tool("org_search", "Search for organizations by name.",
       { query: z.string().describe("Organization name to search for") },
       async ({ query }) => toolResult(await makeRequest("/api/org-search", { search: query })));
-
     server.tool("org_info", "Get information about an organization.",
       { id: z.string().describe("NetworksDB organization ID") },
       async ({ id }) => toolResult(await makeRequest("/api/org-info", { id })));
-
     server.tool("org_networks", "Get networks belonging to an organization.",
       { id: z.string().describe("NetworksDB organization ID"), ipv6: z.boolean().optional().describe("Include IPv6 networks") },
       async ({ id, ipv6 }) => toolResult(await makeRequest("/api/org-networks", ipv6 ? { id, ipv6: true } : { id })));
-
     server.tool("asn_info", "Get information about an ASN.",
       { asn: z.string().describe("Autonomous System Number") },
       async ({ asn }) => toolResult(await makeRequest("/api/asn-info", { asn })));
-
     server.tool("asn_networks", "Get networks belonging to an ASN.",
       { asn: z.string().describe("Autonomous System Number"), ipv6: z.boolean().optional().describe("Include IPv6 networks") },
       async ({ asn, ipv6 }) => toolResult(await makeRequest("/api/asn-networks", ipv6 ? { asn, ipv6: true } : { asn })));
-
     server.tool("dns", "Get DNS records for a domain.",
       { domain: z.string().describe("Domain name to query") },
       async ({ domain }) => toolResult(await makeRequest("/api/dns", { domain })));
-
     server.tool("reverse_dns", "Get reverse DNS records for an IP address.",
       { ip: z.string().describe("IP address to query") },
       async ({ ip }) => toolResult(await makeRequest("/api/reverse-dns", { ip })));
-
     server.tool("mass_reverse_dns", "Get reverse DNS records for a range of IP addresses or CIDR.",
       { start: z.string().describe("CIDR block, or the first IP address when end is supplied"), end: z.string().optional().describe("Optional final IP address in the range") },
       async ({ start, end }) => toolResult(await makeRequest("/api/mass-reverse-dns", end ? { ip_start: start, ip_end: end } : { cidr: start })));
@@ -91,7 +81,7 @@ const handler = createMcpHandler(
         mass_reverse_dns: { description: "Get reverse DNS records for an IP range or CIDR" },
       },
     },
-  },
+  } as any,
   { basePath: "", verboseLogs: true, maxDuration: 60, disableSse: true },
 );
 
